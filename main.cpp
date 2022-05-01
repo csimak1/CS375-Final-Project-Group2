@@ -47,14 +47,19 @@ void heapSort(vector<int> &array){
         heapify(array,0,size);
     }
 }
-
-int main(int argc, char * argv[]){
-    vector<int> arr = {1,2,43,5,7,7,8,8,65,43,3};
-    heapSort(arr);
-    for(int i = 0; i < arr.size(); i++){
-        cout << arr[i] << " ";
+void print_heap(vector<int> &array){
+    for(int i = 0; i < array.size(); i++){
+        cout << array[i] << " ";
     }
     cout << '\n';
+}
+
+int main(int argc, char * argv[]){
+    NumGen heap_generator("heap");
+    vector<int> arr = heap_generator.make_data(100,"normal");
+    // heapSort(arr);
+    // print_heap(arr);
+    
 
 
 

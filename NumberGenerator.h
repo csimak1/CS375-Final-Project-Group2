@@ -7,9 +7,11 @@
 #include <string>
 #include <vector>
 #include <cstring>
+#include <random>
 using namespace std;
 
 class NumGen{
+    public:
     NumGen(string alg1);
     vector<int> make_data(int size, string type);
     string alg;

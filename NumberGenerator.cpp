@@ -4,6 +4,14 @@ NumGen::NumGen(string alg1){
 }
 
 vector<int> NumGen::make_data(int size, string type){
-    vector<int> dummy;
-    return dummy;
+    if(type == "normal"){
+        vector<int> data;
+        int min = 0;
+        int max = size;
+        for(int i = 0; i < size; i++){
+            data.push_back(min + (rand() % max - min + 1 ));
+        }
+        return data;   
+    }
 }
+
