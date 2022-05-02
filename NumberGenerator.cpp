@@ -4,7 +4,7 @@ NumGen::NumGen(string alg1){
 }
 
 vector<int> NumGen::make_data(int size, string type){
-    if(type == "normal"){
+    if(type == "heap"){
         vector<int> data;
         int min = 0;
         int max = size;
