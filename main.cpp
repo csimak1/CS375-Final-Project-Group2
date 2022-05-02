@@ -66,7 +66,8 @@ void print_heap(vector<int> &array)
 
 int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot){
     if(randomPivot == true){
-        swap(array[rand() % array.size()], array[high]);
+        int random = rand() % array.size();
+        swap(array[random], array[high]);
     }
     int pivot = array[high];
     int i = (low - 1);
@@ -82,10 +83,12 @@ int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot){
 
 int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
     if(randomPivot == true){
-        swap(array[rand() % array.size()], array[low]);
+        int random = rand() % array.size();
+        swap(array[random], array[low]);
     }
     int pivot = array[low];
-    int i = low - 1; j = high + 1;
+    int i = low - 1;
+    int j = high + 1;
 
     while (true){
         do{
@@ -104,17 +107,21 @@ int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
     }
 }
 
-int quickSort(vector<int> &array, int low, int high, bool randomPivot, bool hoare){
+void quickSort(vector<int> &array, int low, int high, bool randomPivot, bool hoare){
     if (low < high){
+        int pi;
         if(hoare == false){
-            int pi = partition_lomuto(array, low, high, randomPivot);
+            pi = partition_lomuto(array, low, high, randomPivot);
+            quickSort(array, low, pi - 1, randomPivot, hoare);
+            quickSort(array, pi + 1, high, randomPivot, hoare);
         }
         else{
-            int pi = partition_hoare(array, low, high, randomPivot);
+            pi = partition_hoare(array, low, high, randomPivot);
+            quickSort(array, low, pi, randomPivot, hoare);
+            quickSort(array, pi + 1, high, randomPivot, hoare);
         }
 
-        quickSort(array, low, pi, randomPivot, hoare);
-        quickSort(array, pi + 1, high, randomPivot, hoare);
+        
         
     }
 }
@@ -123,8 +130,10 @@ int main(int argc, char *argv[])
 {
     NumGen heap_generator("heap");
     vector<int> arr = heap_generator.make_data(100, "heap");
-    heapSort(arr);
+    //heapSort(arr);
+    quickSort(arr, 0, arr.size() - 1, false, true);
     print_heap(arr);
+
 
     return 0;
 }
