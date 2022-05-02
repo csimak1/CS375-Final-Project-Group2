@@ -64,6 +64,61 @@ void print_heap(vector<int> &array)
     cout << '\n';
 }
 
+int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot){
+    if(randomPivot == true){
+        swap(array[rand() % array.size()], array[high]);
+    }
+    int pivot = array[high];
+    int i = (low - 1);
+    for(int j = low; j <= high - 1; j++){
+        if(array[j] <= pivot){
+            i++;
+            swap(array[i], array[j]);
+        }
+    }
+    swap(array[i+1], array[high]);
+    return (i+1);
+}
+
+int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
+    if(randomPivot == true){
+        swap(array[rand() % array.size()], array[low]);
+    }
+    int pivot = array[low];
+    int i = low - 1; j = high + 1;
+
+    while (true){
+        do{
+            i++;
+        } while (array[i] < pivot);
+
+        do{
+            j--;
+        } while(array[j] > pivot);
+
+        if(i >= j){
+            return j;
+        }
+
+        swap(array[i], array[j]);
+    }
+}
+
+int quickSort(vector<int> &array, int low, int high, bool randomPivot, bool hoare){
+    if (low < high){
+        if(hoare == false){
+            int pi = partition_lomuto(array, low, high, randomPivot);
+        }
+        else{
+            int pi = partition_hoare(array, low, high, randomPivot);
+        }
+
+        quickSort(array, low, pi, randomPivot, hoare);
+        quickSort(array, pi + 1, high, randomPivot, hoare);
+        
+    }
+}
+
 int main(int argc, char *argv[])
 {
     NumGen heap_generator("heap");
