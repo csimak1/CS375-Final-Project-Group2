@@ -9,7 +9,7 @@ vector<int> NumGen::make_data(int size, string type){
         int min = 0;
         int max = size;
         for(int i = 0; i < size; i++){
-            data.push_back(min + (rand() % max - min + 1 ));
+            data.push_back(min + (rand() % (max - min + 1)));
         }
         return data;   
     }

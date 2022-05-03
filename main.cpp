@@ -66,7 +66,7 @@ void print_heap(vector<int> &array)
 
 int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot){
     if(randomPivot == true){
-        int random = rand() % array.size();
+        int random = low + (rand() % (high - low + 1));
         swap(array[random], array[high]);
     }
     int pivot = array[high];
@@ -83,7 +83,7 @@ int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot){
 
 int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
     if(randomPivot == true){
-        int random = rand() % array.size();
+        int random = low + (rand() % (high - low + 1));
         swap(array[random], array[low]);
     }
     int pivot = array[low];
@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
     NumGen heap_generator("heap");
     vector<int> arr = heap_generator.make_data(100, "heap");
     //heapSort(arr);
-    quickSort(arr, 0, arr.size() - 1, false, true);
+    quickSort(arr, 0, arr.size() - 1, true, true);
     print_heap(arr);
 
 
