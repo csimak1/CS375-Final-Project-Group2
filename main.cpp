@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <chrono>
 #include "NumberGenerator.h"
 using namespace std;
 
@@ -176,10 +177,28 @@ void radix_sort(int arr[], int size)
 int main(int argc, char *argv[])
 {
     NumGen heap_generator("heap");
-    vector<int> arr = heap_generator.make_data(100, "heap");
-    //heapSort(arr);
-    quickSort(arr, 0, arr.size() - 1, true, true);
-    print_heap(arr);
+    //-------------- ALL HEAP TESTS -------------------
+    // sizes 1E2 -- 1E9
+    int long array_sizes[8] = {100,1000,10000,100000,1000000,10000000,100000000,1000000000};
+    for(int i = 0; i < 8; i++){
+        vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
+        auto start = chrono::high_resolution_clock::now();
+        heapSort(arr);
+        auto end = chrono::high_resolution_clock::now();
+        chrono::duration<double, milli> diff = end - start;
+        if( (diff.count()/1000) > 60 ){
+            cout << "Heapsort with size " << array_sizes[i] << " took " << " " << (diff.count()/1000/60) << " minutes " << endl;
+        }
+        else{
+            cout << "Heapsort with size " << array_sizes[i] << " took " << " " << (diff.count()/1000) << " seconds " << endl;
+        }
+        
+    }
+    // ------------- END HEAP TESTS ---------------------------
+    
+    
+   // quickSort(arr, 0, arr.size() - 1, true, true);
+    //print_heap(arr);
 
     // Call to Radix:
     /*
