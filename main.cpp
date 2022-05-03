@@ -65,25 +65,31 @@ void print_heap(vector<int> &array)
     cout << '\n';
 }
 
-int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot){
-    if(randomPivot == true){
+int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot)
+{
+    if (randomPivot == true)
+    {
         int random = low + (rand() % (high - low + 1));
         swap(array[random], array[high]);
     }
     int pivot = array[high];
     int i = (low - 1);
-    for(int j = low; j <= high - 1; j++){
-        if(array[j] <= pivot){
+    for (int j = low; j <= high - 1; j++)
+    {
+        if (array[j] <= pivot)
+        {
             i++;
             swap(array[i], array[j]);
         }
     }
-    swap(array[i+1], array[high]);
-    return (i+1);
+    swap(array[i + 1], array[high]);
+    return (i + 1);
 }
 
-int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
-    if(randomPivot == true){
+int partition_hoare(vector<int> &array, int low, int high, bool randomPivot)
+{
+    if (randomPivot == true)
+    {
         int random = low + (rand() % (high - low + 1));
         swap(array[random], array[low]);
     }
@@ -91,16 +97,20 @@ int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
     int i = low - 1;
     int j = high + 1;
 
-    while (true){
-        do{
+    while (true)
+    {
+        do
+        {
             i++;
         } while (array[i] < pivot);
 
-        do{
+        do
+        {
             j--;
-        } while(array[j] > pivot);
+        } while (array[j] > pivot);
 
-        if(i >= j){
+        if (i >= j)
+        {
             return j;
         }
 
@@ -108,97 +118,121 @@ int partition_hoare(vector<int> &array, int low, int high, bool randomPivot){
     }
 }
 
-void quickSort(vector<int> &array, int low, int high, bool randomPivot, bool hoare){
-    if (low < high){
+void quickSort(vector<int> &array, int low, int high, bool randomPivot, bool hoare)
+{
+    if (low < high)
+    {
         int pi;
-        if(hoare == false){
+        if (hoare == false)
+        {
             pi = partition_lomuto(array, low, high, randomPivot);
             quickSort(array, low, pi - 1, randomPivot, hoare);
             quickSort(array, pi + 1, high, randomPivot, hoare);
         }
-        else{
+        else
+        {
             pi = partition_hoare(array, low, high, randomPivot);
             quickSort(array, low, pi, randomPivot, hoare);
             quickSort(array, pi + 1, high, randomPivot, hoare);
         }
-
-        
-        
     }
 }
 
 // *** START Radix Sort ***
 
-int get_max(int arr[], int size) {
-    int max = arr[0]; 
+int get_max(int arr[], int size)
+{
+    int max = arr[0];
 
-    for (int i = 1; i < size; i++) {
-        if (arr[i] > max) {
+    for (int i = 1; i < size; i++)
+    {
+        if (arr[i] > max)
+        {
             max = arr[i];
-        } 
+        }
     }
-         
-    return max; 
-} 
 
-void counting_sort(int arr[], int size, int div) {
-    int output[size]; 
-    int count[10] = {0}; 
-  
-    for (int i = 0; i < size; i++) {
-        count[ (arr[i]/div)%10 ]++; 
+    return max;
+}
+
+void counting_sort(int arr[], int size, int div)
+{
+    int output[size];
+    int count[10] = {0};
+
+    for (int i = 0; i < size; i++)
+    {
+        count[(arr[i] / div) % 10]++;
     }
-        
-    for (int i = 1; i < 10; i++) {
+
+    for (int i = 1; i < 10; i++)
+    {
         count[i] += count[i - 1];
     }
-         
-    for (int i = size - 1; i >= 0; i--) { 
-        output[count[ (arr[i]/div)%10 ] - 1] = arr[i]; 
-        count[ (arr[i]/div)%10 ]--; 
-    } 
-  
-    for (int i = 0; i < size; i++) {
-        arr[i] = output[i]; 
+
+    for (int i = size - 1; i >= 0; i--)
+    {
+        output[count[(arr[i] / div) % 10] - 1] = arr[i];
+        count[(arr[i] / div) % 10]--;
     }
-} 
-  
-void radix_sort(int arr[], int size) 
-{ 
-    int m = get_max(arr, size); 
-    for (int div = 1; m/div > 0; div *= 10) {
-        counting_sort(arr, size, div); 
-    }      
-} 
+
+    for (int i = 0; i < size; i++)
+    {
+        arr[i] = output[i];
+    }
+}
+
+void radix_sort(int arr[], int size)
+{
+    int m = get_max(arr, size);
+    for (int div = 1; m / div > 0; div *= 10)
+    {
+        counting_sort(arr, size, div);
+    }
+}
 
 // *** END Radix Sort ***
-
 
 int main(int argc, char *argv[])
 {
     NumGen heap_generator("heap");
     //-------------- ALL HEAP TESTS -------------------
-    // sizes 1E2 -- 1E9
-    int long array_sizes[8] = {100,1000,10000,100000,1000000,10000000,100000000,1000000000};
-    for(int i = 0; i < 8; i++){
+    // sizes 2^15 -- 2^22
+    int exponent = 15;
+    int long long array_sizes[11] = {32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304,8388608, 16777216, 33554432 };
+    cout << "---------HEAP TEST---------------" << endl;
+    for (int i = 0; i < 11; i++)
+    {
+        
         vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
         auto start = chrono::high_resolution_clock::now();
         heapSort(arr);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff = end - start;
-        if( (diff.count()/1000) > 60 ){
-            cout << "Heapsort with size " << array_sizes[i] << " took " << " " << (diff.count()/1000/60) << " minutes " << endl;
-        }
-        else{
-            cout << "Heapsort with size " << array_sizes[i] << " took " << " " << (diff.count()/1000) << " seconds " << endl;
-        }
-        
+        cout << "Heapsort with size " << array_sizes[i] << " (2^" << exponent << ") " << " took "
+             << " " << (diff.count() / 1000) << " seconds " << endl;
+        exponent += 1;
     }
+    cout << "-----------------------------------" << endl;
+    exponent = 15;
+    cout << "---------QUICKSORT TEST---------------" << endl;
+    for (int i = 0; i < 11; i++)
+    {
+        
+        vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
+        auto start = chrono::high_resolution_clock::now();
+        quickSort(arr, 0, arr.size() - 1, true, true);
+        auto end = chrono::high_resolution_clock::now();
+        chrono::duration<double, milli> diff = end - start;
+        cout << "Quicksort with size " << array_sizes[i] << " (2^" << exponent << ") " << " took "
+             << " " << (diff.count() / 1000) << " seconds " << endl;
+        exponent += 1;
+    }
+    cout << "-----------------------------------" << endl;
     // ------------- END HEAP TESTS ---------------------------
-    
-    
-   // quickSort(arr, 0, arr.size() - 1, true, true);
-    //print_heap(arr);
+
+    // quickSort(arr, 0, arr.size() - 1, true, true);
+    // print_heap(arr);
 
     // Call to Radix:
     /*
