@@ -181,6 +181,11 @@ int main(int argc, char *argv[])
     quickSort(arr, 0, arr.size() - 1, true, true);
     print_heap(arr);
 
+    // Call to Radix:
+    /*
+    int* a = &arr[0];
+    radix_sort(a, arr.size());
+    */
 
     return 0;
 }
