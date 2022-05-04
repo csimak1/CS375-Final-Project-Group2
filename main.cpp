@@ -13,6 +13,14 @@ using namespace std;
 // Radix Sort
 // Quiksort
 
+void print_array(vector<int> &array)
+{
+    for (int i = 0; i < array.size(); i++)
+    {
+        cout << array[i] << " ";
+    }
+    cout << '\n';
+}
 void heapify(vector<int> &array, int i, int size)
 {
     int largest = i;
@@ -45,25 +53,26 @@ void build_heap(vector<int> &array)
     }
 }
 
-void heapSort(vector<int> &array)
+void heapSort(vector<int> &array, int print)
 {
     build_heap(array);
+    if(print == 1){
+            cout << "After build-max heap: "; 
+            print_array(array);
+        }
     int size = array.size();
     for (int i = array.size() - 1; i >= 1; i--)
     {
         swap(array[0], array[i]);
         size -= 1;
         heapify(array, 0, size);
+        if(print == 1){
+            cout << "After swap and heapify: "; 
+            print_array(array);
+        }
     }
 }
-void print_array(vector<int> &array)
-{
-    for (int i = 0; i < array.size(); i++)
-    {
-        cout << array[i] << " ";
-    }
-    cout << '\n';
-}
+
 
 int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot)
 {
@@ -201,7 +210,7 @@ void printArray(int array[], int size)
 void print_correctness(NumGen num_generator)
 {
     // Correctness Demo Arrays
-    vector<int> heap_test = num_generator.make_data(15, "random");
+    vector<int> heap_test = num_generator.make_data(8, "randomRadix");
     vector<int> hoares_test = num_generator.make_data(15, "random");
     vector<int> lomuto_test = num_generator.make_data(15, "random");
     vector<int> radix_test = num_generator.make_data(15, "random");
@@ -213,7 +222,7 @@ void print_correctness(NumGen num_generator)
     cout << "--------HEAP CORRECTNESS DEMO-------" << endl;
     cout << "Before HeapSort: ";
     print_array(heap_test);
-    heapSort(heap_test);
+    heapSort(heap_test,1);
     cout << "After HeapSort: ";
     print_array(heap_test);
     cout << endl;
@@ -271,7 +280,7 @@ int main(int argc, char *argv[])
         vector<int> arr_radix = arr;
 
         auto start = chrono::high_resolution_clock::now();
-        heapSort(arr);
+        heapSort(arr,0);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff = end - start;
         cout << "Heapsort took : " << (diff.count()) << " ms" << endl;
