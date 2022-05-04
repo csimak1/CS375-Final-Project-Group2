@@ -204,13 +204,26 @@ int main(int argc, char *argv[])
     // sizes 2^15 -- 2^22
     int exponent = 15;
     int long long array_sizes[11] = {32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304,8388608, 16777216, 33554432 };
+    vector<int> testSorted = heap_generator.make_data(100, "sorted");
+    vector<int> testReverse = heap_generator.make_data(100, "reverse");
+    vector<int> testhighValue = heap_generator.make_data(100, "highValue");
+
+    print_heap(testSorted);
+    cout << "-------" << endl;
+    print_heap(testReverse);
+    cout << "-------" << endl;
+    print_heap(testhighValue);
+    cout << "-------" << endl;
+
+
+    //ABOVE IS JUST TESTING GENERATOR FUNCTIONS
     
     for (int i = 0; i < 11; i++)
     {
         cout << "---------------------------------" << endl;
         cout << "Size: " << array_sizes[i] << "(2^" << exponent << ")" << endl;
         // heapsort
-        vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
+        vector<int> arr = heap_generator.make_data(array_sizes[i], "random");
         vector<int> arr_hoares = arr;
         vector<int> arr_lomuto = arr;
         vector<int> arr_radix = arr;
