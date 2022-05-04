@@ -13,6 +13,8 @@ using namespace std;
 // Radix Sort
 // Quiksort
 
+int swapCounter;
+
 void print_array(vector<int> &array)
 {
     for (int i = 0; i < array.size(); i++)
@@ -42,6 +44,7 @@ void heapify(vector<int> &array, int i, int size)
     if (largest != i)
     {
         swap(array[i], array[largest]);
+        swapCounter++;
         heapify(array, largest, size);
     }
 }
@@ -64,6 +67,7 @@ void heapSort(vector<int> &array, int print)
     for (int i = array.size() - 1; i >= 1; i--)
     {
         swap(array[0], array[i]);
+        swapCounter++;
         size -= 1;
         heapify(array, 0, size);
         if(print == 1){
@@ -80,6 +84,7 @@ int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot)
     {
         int random = low + (rand() % (high - low + 1));
         swap(array[random], array[high]);
+        swapCounter++;
     }
     int pivot = array[high];
     int i = (low - 1);
@@ -89,9 +94,11 @@ int partition_lomuto(vector<int> &array, int low, int high, bool randomPivot)
         {
             i++;
             swap(array[i], array[j]);
+            swapCounter++;
         }
     }
     swap(array[i + 1], array[high]);
+    swapCounter++;
     return (i + 1);
 }
 
@@ -101,6 +108,7 @@ int partition_hoare(vector<int> &array, int low, int high, bool randomPivot)
     {
         int random = low + (rand() % (high - low + 1));
         swap(array[random], array[low]);
+        swapCounter++;
     }
     int pivot = array[low];
     int i = low - 1;
@@ -124,6 +132,7 @@ int partition_hoare(vector<int> &array, int low, int high, bool randomPivot)
         }
 
         swap(array[i], array[j]);
+        swapCounter++;
     }
 }
 
@@ -273,22 +282,28 @@ int main(int argc, char *argv[])
         vector<int> arr_radix = arr;
 
         auto start = chrono::high_resolution_clock::now();
+        swapCounter = 0;
         heapSort(arr,0);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff = end - start;
         cout << "Heapsort took : " << (diff.count()) << " ms" << endl;
+        cout << "Heapsort performed " << swapCounter << " swaps" << endl;
         // hoares
         auto start_hoares = chrono::high_resolution_clock::now();
+        swapCounter = 0;
         quickSort(arr_hoares, 0, arr_hoares.size() - 1, true, true);
         auto end_hoares = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_hoares = end_hoares - start_hoares;
         cout << "Randomized Quicksort with hoares took : " << (diff_hoares.count()) << " ms" << endl;
+        cout << "Randomized Quicksort with hoares performed " << swapCounter << " swaps" << endl;
         // larmuto
         auto start_lomuto = chrono::high_resolution_clock::now();
+        swapCounter = 0;
         quickSort(arr_lomuto, 0, arr_lomuto.size() - 1, true, false);
         auto end_lomuto = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_lomuto = end_lomuto - start_lomuto;
         cout << "Randomized Quicksort with lomuto took : " << (diff_lomuto.count()) << " ms" << endl;
+        cout << "Randomized Quicksort with lomuto performed " << swapCounter << " swaps" << endl;
         // Radix
         int *array = &arr_radix[0];
         int n = arr_radix.size();
