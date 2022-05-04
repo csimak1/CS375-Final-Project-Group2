@@ -19,10 +19,22 @@ vector<int> NumGen::make_data(int size, string type){
         for (int i = size; i > 0; i--){
             data.push_back(i);
         }
+        return data;
     }
     else if (type == "sorted"){
         for (int i = 0; i < size; i++){
             data.push_back(i);
         }
+        return data;
     }
+    else if(type == "highValue"){
+        //vector<int> data;
+        int min = 100000 * size;
+        int max = 1000000 * size;
+        for(int i = 0; i < size; i++){
+            data.push_back(min + (rand() % (max - min + 1)));
+        }
+        return data;   
+    }
+    
 }
