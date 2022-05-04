@@ -196,17 +196,19 @@ void printArray(int array[], int size) {
 
 // *** END Radix Sort ***
 
+
 int main(int argc, char *argv[])
 {
     NumGen heap_generator("heap");
     //-------------- ALL HEAP TESTS -------------------
     // sizes 2^15 -- 2^22
+    int exponent = 15;
     int long long array_sizes[11] = {32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304,8388608, 16777216, 33554432 };
     
     for (int i = 0; i < 11; i++)
     {
         cout << "---------------------------------" << endl;
-        cout << "Size: " << array_sizes[i] << endl;
+        cout << "Size: " << array_sizes[i] << "(2^" << exponent << ")" << endl;
         // heapsort
         vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
         vector<int> arr_hoares = arr;
@@ -232,14 +234,16 @@ int main(int argc, char *argv[])
         cout << "Quicksort with lomuto took :" << (diff_lomuto.count() / 1000) << " seconds " << endl;
         // Radix
         int * array = &arr_radix[0];
-        int n = sizeof(array) / sizeof(array[0]);
+        int n = arr_radix.size();
         auto start_radix = chrono::high_resolution_clock::now();
         radixsort(array, n);
         auto end_radix = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_radix = end_radix - start_radix;
         cout << "Radix Sort took :" << (diff_radix.count() / 1000) << " seconds " << endl;
+        exponent += 1;
     }
     cout << "---------------------------------" << endl;
+
     
    
 
