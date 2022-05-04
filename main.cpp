@@ -219,7 +219,7 @@ void print_correctness(NumGen num_generator)
     cout << endl;
     cout << "--------HOARES CORRECTNESS DEMO-------" << endl;
     // HOARES DEMO
-    cout << "Before QuickSort with Hoares Partition: ";
+    cout << "Before Randomized Quicksort with Hoares Partition: ";
     print_array(hoares_test);
     quickSort(hoares_test, 0, hoares_test.size() - 1, true, true);
     cout << "After HeapSort: ";
@@ -227,10 +227,10 @@ void print_correctness(NumGen num_generator)
     cout << endl;
     cout << "--------LOMUTO CORRECTNESS DEMO-------" << endl;
     // LOMUTO DEMO
-    cout << "Before Quicksort with Lomuto Partition: ";
+    cout << "Before Randomized Quicksort with Lomuto Partition: ";
     print_array(lomuto_test);
     quickSort(lomuto_test, 0, lomuto_test.size() - 1, true, false);
-    cout << "After Quicksort with Lomuto Partition: ";
+    cout << "After Randomized Quicksort with Lomuto Partition: ";
     print_array(lomuto_test);
     cout << endl;
     cout << "--------RADIX CORRECTNESS DEMO -------" << endl;
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
     int exponent = 10;
     int long long array_sizes[11] = {1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
     // Correctness tests
-    //print_correctness(num_generator);
+    print_correctness(num_generator);
 
     // ABOVE IS JUST TESTING GENERATOR FUNCTIONS
     cout << endl;
@@ -280,13 +280,13 @@ int main(int argc, char *argv[])
         quickSort(arr_hoares, 0, arr_hoares.size() - 1, true, true);
         auto end_hoares = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_hoares = end_hoares - start_hoares;
-        cout << "Quicksort with hoares took : " << (diff_hoares.count()) << " ms" << endl;
+        cout << "Randomized Quicksort with hoares took : " << (diff_hoares.count()) << " ms" << endl;
         // larmuto
         auto start_lomuto = chrono::high_resolution_clock::now();
         quickSort(arr_lomuto, 0, arr_lomuto.size() - 1, true, false);
         auto end_lomuto = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_lomuto = end_lomuto - start_lomuto;
-        cout << "Quicksort with lomuto took : " << (diff_lomuto.count()) << " ms" << endl;
+        cout << "Randomized Quicksort with lomuto took : " << (diff_lomuto.count()) << " ms" << endl;
         // Radix
         int *array = &arr_radix[0];
         int n = arr_radix.size();
@@ -302,24 +302,24 @@ int main(int argc, char *argv[])
     exponent = 10;
     // QUICKSORT RANDOM VS SORTED TESTS -------------------------------------------------------- 
 
-    cout << "Quicksort (Hoares) with Random Order vs with Reversed Order Input Arrays: " << endl;
+    cout << "Randomized Quicksort (Hoares) with Random Order vs with Reversed Order Input Arrays: " << endl;
     cout << "-------------------------------------" << endl;
-    for(int i = 0; i < 6; i++){
+    for(int i = 0; i < 11; i++){
     // testing arrays
     vector<int> random_test = num_generator.make_data(array_sizes[i], "random");
     vector<int> reverse_test = num_generator.make_data(array_sizes[i], "reverse");
     // random
     auto start_random = chrono::high_resolution_clock::now();
-    quickSort(random_test, 0, random_test.size() - 1, false, true);
+    quickSort(random_test, 0, random_test.size() - 1, true, true);
     auto end_random = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_random = end_random - start_random;
-    cout << "Quicksort with Random input size  " << array_sizes[i] << " (2^" << exponent << ")" <<  " took : " <<  (diff_random.count()) << " ms" << endl;
+    cout << "Randomized Quicksort with Random input size  " << array_sizes[i] << " (2^" << exponent << ")" <<  " took : " <<  (diff_random.count()) << " ms" << endl;
     // reversely sorted
     auto start_reverse = chrono::high_resolution_clock::now();
-    quickSort(reverse_test, 0, reverse_test.size() - 1, false, true);
+    quickSort(reverse_test, 0, reverse_test.size() - 1, true, true);
     auto end_reverse = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_reverse = end_reverse - start_reverse;
-    cout << "Quicksort with Reversed input size  " << array_sizes[i] << " (2^" << exponent << ")" <<  " took : " <<  (diff_reverse.count()) << " ms" << endl << endl;
+    cout << "Randomized Quicksort with Reversed input size  " << array_sizes[i] << " (2^" << exponent << ")" <<  " took : " <<  (diff_reverse.count()) << " ms" << endl << endl;
     exponent += 1;
     }
     // ------------------------------------------------------------------------
