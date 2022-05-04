@@ -140,55 +140,58 @@ void quickSort(vector<int> &array, int low, int high, bool randomPivot, bool hoa
 
 // *** START Radix Sort ***
 
-int get_max(int arr[], int size)
-{
-    int max = arr[0];
-
-    for (int i = 1; i < size; i++)
-    {
-        if (arr[i] > max)
-        {
-            max = arr[i];
-        }
-    }
-
-    return max;
+// Function to get the largest element from an array
+int getMax(int array[], int n) {
+  int max = array[0];
+  for (int i = 1; i < n; i++)
+    if (array[i] > max)
+      max = array[i];
+  return max;
 }
 
-void counting_sort(int arr[], int size, int div)
-{
-    int output[size];
-    int count[10] = {0};
+// Using counting sort to sort the elements in the basis of significant places
+void countingSort(int array[], int size, int place) {
+  const int max = 10;
+  int output[size];
+  int count[max];
 
-    for (int i = 0; i < size; i++)
-    {
-        count[(arr[i] / div) % 10]++;
-    }
+  for (int i = 0; i < max; ++i)
+    count[i] = 0;
 
-    for (int i = 1; i < 10; i++)
-    {
-        count[i] += count[i - 1];
-    }
+  // Calculate count of elements
+  for (int i = 0; i < size; i++)
+    count[(array[i] / place) % 10]++;
 
-    for (int i = size - 1; i >= 0; i--)
-    {
-        output[count[(arr[i] / div) % 10] - 1] = arr[i];
-        count[(arr[i] / div) % 10]--;
-    }
+  // Calculate cumulative count
+  for (int i = 1; i < max; i++)
+    count[i] += count[i - 1];
 
-    for (int i = 0; i < size; i++)
-    {
-        arr[i] = output[i];
-    }
+  // Place the elements in sorted order
+  for (int i = size - 1; i >= 0; i--) {
+    output[count[(array[i] / place) % 10] - 1] = array[i];
+    count[(array[i] / place) % 10]--;
+  }
+
+  for (int i = 0; i < size; i++)
+    array[i] = output[i];
 }
 
-void radix_sort(int arr[], int size)
-{
-    int m = get_max(arr, size);
-    for (int div = 1; m / div > 0; div *= 10)
-    {
-        counting_sort(arr, size, div);
-    }
+// Main function to implement radix sort
+void radixsort(int array[], int size) {
+  // Get maximum element
+  int max = getMax(array, size);
+
+  // Apply counting sort to sort elements based on place value.
+  for (int place = 1; max / place > 0; place *= 10)
+    countingSort(array, size, place);
+}
+
+// Print an array
+void printArray(int array[], int size) {
+  int i;
+  for (i = 0; i < size; i++)
+    cout << array[i] << " ";
+  cout << endl;
 }
 
 // *** END Radix Sort ***
@@ -198,47 +201,47 @@ int main(int argc, char *argv[])
     NumGen heap_generator("heap");
     //-------------- ALL HEAP TESTS -------------------
     // sizes 2^15 -- 2^22
-    int exponent = 15;
     int long long array_sizes[11] = {32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304,8388608, 16777216, 33554432 };
-    cout << "---------HEAP TEST---------------" << endl;
+    
     for (int i = 0; i < 11; i++)
     {
-        
+        cout << "---------------------------------" << endl;
+        cout << "Size: " << array_sizes[i] << endl;
+        // heapsort
         vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
+        vector<int> arr_hoares = arr;
+        vector<int> arr_lomuto = arr;
+        vector<int> arr_radix = arr;
+
         auto start = chrono::high_resolution_clock::now();
         heapSort(arr);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff = end - start;
-        cout << "Heapsort with size " << array_sizes[i] << " (2^" << exponent << ") " << " took "
-             << " " << (diff.count() / 1000) << " seconds " << endl;
-        exponent += 1;
+        cout << "Heapsort took :" << (diff.count() / 1000) << " seconds " << endl;
+        // hoares
+        auto start_hoares = chrono::high_resolution_clock::now();
+        quickSort(arr_hoares, 0, arr_hoares.size() - 1, true, true);
+        auto end_hoares = chrono::high_resolution_clock::now();
+        chrono::duration<double, milli> diff_hoares = end_hoares - start_hoares;
+        cout << "Quicksort with haores took :" << (diff_hoares.count() / 1000) << " seconds " << endl;
+        // larmuto
+        auto start_lomuto = chrono::high_resolution_clock::now();
+        quickSort(arr_lomuto, 0, arr_lomuto.size() - 1, true, false);
+        auto end_lomuto = chrono::high_resolution_clock::now();
+        chrono::duration<double, milli> diff_lomuto = end_lomuto - start_lomuto;
+        cout << "Quicksort with lomuto took :" << (diff_lomuto.count() / 1000) << " seconds " << endl;
+        // Radix
+        int * array = &arr_radix[0];
+        int n = sizeof(array) / sizeof(array[0]);
+        auto start_radix = chrono::high_resolution_clock::now();
+        radixsort(array, n);
+        auto end_radix = chrono::high_resolution_clock::now();
+        chrono::duration<double, milli> diff_radix = end_radix - start_radix;
+        cout << "Radix Sort took :" << (diff_radix.count() / 1000) << " seconds " << endl;
     }
-    cout << "-----------------------------------" << endl;
-    exponent = 15;
-    cout << "---------QUICKSORT TEST---------------" << endl;
-    for (int i = 0; i < 11; i++)
-    {
-        
-        vector<int> arr = heap_generator.make_data(array_sizes[i], "heap");
-        auto start = chrono::high_resolution_clock::now();
-        quickSort(arr, 0, arr.size() - 1, true, true);
-        auto end = chrono::high_resolution_clock::now();
-        chrono::duration<double, milli> diff = end - start;
-        cout << "Quicksort with size " << array_sizes[i] << " (2^" << exponent << ") " << " took "
-             << " " << (diff.count() / 1000) << " seconds " << endl;
-        exponent += 1;
-    }
-    cout << "-----------------------------------" << endl;
-    // ------------- END HEAP TESTS ---------------------------
-
-    // quickSort(arr, 0, arr.size() - 1, true, true);
-    // print_heap(arr);
-
-    // Call to Radix:
-    /*
-    int* a = &arr[0];
-    radix_sort(a, arr.size());
-    */
+    cout << "---------------------------------" << endl;
+    
+   
 
     return 0;
 }

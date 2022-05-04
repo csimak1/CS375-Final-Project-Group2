@@ -1,4 +1,5 @@
 #include "NumberGenerator.h"
+
 NumGen::NumGen(string alg1){
     alg = alg1;
 }
