@@ -21,12 +21,6 @@ vector<int> NumGen::make_data(int size, string type){
         }
         return data;
     }
-    else if (type == "sorted"){
-        for (int i = 0; i < size; i++){
-            data.push_back(i);
-        }
-        return data;
-    }
     else if(type == "highValue"){
         //vector<int> data;
         int min = 10000 * size;
