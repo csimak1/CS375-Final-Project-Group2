@@ -182,10 +182,8 @@ void countingSort(int array[], int size, int place)
 // Main function to implement radix sort
 void radixsort(int array[], int size)
 {
-    // Get maximum element
     int max = getMax(array, size);
 
-    // Apply counting sort to sort elements based on place value.
     for (int place = 1; max / place > 0; place *= 10)
         countingSort(array, size, place);
 }
@@ -253,11 +251,11 @@ int main(int argc, char *argv[])
     NumGen num_generator("heap");
 
     //-------------- ALL HEAP TESTS -------------------
-    // sizes 2^15 -- 2^22
+    // sizes 2^10 -- 2^20
     int exponent = 10;
-    int long long array_sizes[11] = {1024, 2048, 131072, 4096, 8192, 16384, 32768, 65536, 262144, 524288, 1048576};
+    int long long array_sizes[11] = {1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576};
     // Correctness tests
-    print_correctness(num_generator);
+    //print_correctness(num_generator);
 
     // ABOVE IS JUST TESTING GENERATOR FUNCTIONS
     cout << endl;
@@ -282,7 +280,7 @@ int main(int argc, char *argv[])
         quickSort(arr_hoares, 0, arr_hoares.size() - 1, true, true);
         auto end_hoares = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_hoares = end_hoares - start_hoares;
-        cout << "Quicksort with haores took : " << (diff_hoares.count()) << " ms" << endl;
+        cout << "Quicksort with hoares took : " << (diff_hoares.count()) << " ms" << endl;
         // larmuto
         auto start_lomuto = chrono::high_resolution_clock::now();
         quickSort(arr_lomuto, 0, arr_lomuto.size() - 1, true, false);
@@ -301,34 +299,37 @@ int main(int argc, char *argv[])
     }
     cout << "---------------------------------" << endl
          << endl;
-
+    exponent = 10;
     // QUICKSORT RANDOM VS SORTED TESTS -------------------------------------------------------- 
+
     cout << "Quicksort (Hoares) with Random Order vs with Reversed Order Input Arrays: " << endl;
     cout << "-------------------------------------" << endl;
+    for(int i = 0; i < 6; i++){
     // testing arrays
-    vector<int> random_test = num_generator.make_data(10000, "random");
-    vector<int> reverse_test = num_generator.make_data(100000, "reverse");
-    // hoares
+    vector<int> random_test = num_generator.make_data(array_sizes[i], "random");
+    vector<int> reverse_test = num_generator.make_data(array_sizes[i], "reverse");
+    // random
     auto start_random = chrono::high_resolution_clock::now();
-    quickSort(random_test, 0, random_test.size() - 1, true, true);
+    quickSort(random_test, 0, random_test.size() - 1, false, true);
     auto end_random = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_random = end_random - start_random;
-    cout << "Quicksort with Random took : " << (diff_random.count()) << " ms" << endl;
-    // larmuto
+    cout << "Quicksort with Random input size  " << array_sizes[i] << " (2^" << exponent << ")" <<  " took : " <<  (diff_random.count()) << " ms" << endl;
+    // reversely sorted
     auto start_reverse = chrono::high_resolution_clock::now();
-    quickSort(reverse_test, 0, reverse_test.size() - 1, true, true);
+    quickSort(reverse_test, 0, reverse_test.size() - 1, false, true);
     auto end_reverse = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_reverse = end_reverse - start_reverse;
-    cout << "Quicksort with Reverse took : " << (diff_reverse.count()) << " ms" << endl
-         << endl
-         << endl;
+    cout << "Quicksort with Reversed input size  " << array_sizes[i] << " (2^" << exponent << ")" <<  " took : " <<  (diff_reverse.count()) << " ms" << endl << endl;
+    exponent += 1;
+    }
     // ------------------------------------------------------------------------
-
+    exponent = 10;
     // radix testing
     cout << "Radix Sort with Large array values vs Smaller array values : " << endl;
     cout << "-------------------------------------" << endl;
-    vector<int> small = num_generator.make_data(10000, "random");
-    vector<int> large = num_generator.make_data(10000, "highValue");
+    for(int i = 0; i < 11; i++){
+    vector<int> small = num_generator.make_data(array_sizes[i], "randomRadix");
+    vector<int> large = num_generator.make_data(array_sizes[i], "highValue");
     // small input
     int *array = &small[0];
     int n = small.size();
@@ -336,7 +337,7 @@ int main(int argc, char *argv[])
     radixsort(array, n);
     auto end_small = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_small = end_small - start_small;
-    cout << "Radix Sort with smaller input values took : " << (diff_small.count()) << " ms" << endl;
+     cout << "Radix Sort with smaller element size  " << array_sizes[i] << " (2^" << exponent << ")" << " took : " << (diff_small.count()) << " ms" << endl;
     // large input
     array = &large[0];
     n = large.size();
@@ -344,7 +345,8 @@ int main(int argc, char *argv[])
     radixsort(array, n);
     auto end_large = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_large = end_large - start_large;
-    cout << "Radix Sort with large input values took : " << (diff_large.count()) << " ms" << endl;
-
+    cout << "Radix Sort with large element size  " << array_sizes[i] << " (2^" << exponent << ")" << " took : " << (diff_large.count()) << " ms" << endl << endl;
+    exponent += 1;
+    }
     return 0;
 }
