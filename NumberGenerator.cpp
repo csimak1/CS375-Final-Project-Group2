@@ -36,5 +36,9 @@ vector<int> NumGen::make_data(int size, string type){
         }
         return data;   
     }
+    else if(type == "Single High Val"){
+
+    }
+    return data;
     
 }
