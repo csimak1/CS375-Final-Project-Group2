@@ -276,19 +276,19 @@ int main(int argc, char *argv[])
         heapSort(arr);
         auto end = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff = end - start;
-        cout << "Heapsort took : " << (diff.count()  ) << " ms" << endl;
+        cout << "Heapsort took : " << (diff.count()) << " ms" << endl;
         // hoares
         auto start_hoares = chrono::high_resolution_clock::now();
         quickSort(arr_hoares, 0, arr_hoares.size() - 1, true, true);
         auto end_hoares = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_hoares = end_hoares - start_hoares;
-        cout << "Quicksort with haores took : " << (diff_hoares.count()  ) << " ms" << endl;
+        cout << "Quicksort with haores took : " << (diff_hoares.count()) << " ms" << endl;
         // larmuto
         auto start_lomuto = chrono::high_resolution_clock::now();
         quickSort(arr_lomuto, 0, arr_lomuto.size() - 1, true, false);
         auto end_lomuto = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_lomuto = end_lomuto - start_lomuto;
-        cout << "Quicksort with lomuto took : " << (diff_lomuto.count()  ) << " ms" << endl;
+        cout << "Quicksort with lomuto took : " << (diff_lomuto.count()) << " ms" << endl;
         // Radix
         int *array = &arr_radix[0];
         int n = arr_radix.size();
@@ -296,13 +296,16 @@ int main(int argc, char *argv[])
         radixsort(array, n);
         auto end_radix = chrono::high_resolution_clock::now();
         chrono::duration<double, milli> diff_radix = end_radix - start_radix;
-        cout << "Radix Sort took : " << (diff_radix.count()  ) << " ms" << endl;
+        cout << "Radix Sort took : " << (diff_radix.count()) << " ms" << endl;
         exponent += 1;
     }
-    cout << "---------------------------------" << endl << endl;
+    cout << "---------------------------------" << endl
+         << endl;
+
+    // QUICKSORT RANDOM VS SORTED TESTS -------------------------------------------------------- 
     cout << "Quicksort (Hoares) with Random Order vs with Reversed Order Input Arrays: " << endl;
-    cout <<"-------------------------------------" << endl;
-    //testing arrays
+    cout << "-------------------------------------" << endl;
+    // testing arrays
     vector<int> random_test = num_generator.make_data(10000, "random");
     vector<int> reverse_test = num_generator.make_data(100000, "reverse");
     // hoares
@@ -310,13 +313,38 @@ int main(int argc, char *argv[])
     quickSort(random_test, 0, random_test.size() - 1, true, true);
     auto end_random = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_random = end_random - start_random;
-    cout << "Quicksort with Random took : " << (diff_random.count()  ) << " ms" << endl;
+    cout << "Quicksort with Random took : " << (diff_random.count()) << " ms" << endl;
     // larmuto
     auto start_reverse = chrono::high_resolution_clock::now();
     quickSort(reverse_test, 0, reverse_test.size() - 1, true, true);
     auto end_reverse = chrono::high_resolution_clock::now();
     chrono::duration<double, milli> diff_reverse = end_reverse - start_reverse;
-    cout << "Quicksort with Reverse took : " << (diff_reverse.count()  ) << " ms" << endl << endl << endl;
+    cout << "Quicksort with Reverse took : " << (diff_reverse.count()) << " ms" << endl
+         << endl
+         << endl;
+    // ------------------------------------------------------------------------
+
+    // radix testing
+    cout << "Radix Sort with Large array values vs Smaller array values : " << endl;
+    cout << "-------------------------------------" << endl;
+    vector<int> small = num_generator.make_data(10000, "random");
+    vector<int> large = num_generator.make_data(10000, "highValue");
+    // small input
+    int *array = &small[0];
+    int n = small.size();
+    auto start_small = chrono::high_resolution_clock::now();
+    radixsort(array, n);
+    auto end_small = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> diff_small = end_small - start_small;
+    cout << "Radix Sort with smaller input values took : " << (diff_small.count()) << " ms" << endl;
+    // large input
+    array = &large[0];
+    n = large.size();
+    auto start_large = chrono::high_resolution_clock::now();
+    radixsort(array, n);
+    auto end_large = chrono::high_resolution_clock::now();
+    chrono::duration<double, milli> diff_large = end_large - start_large;
+    cout << "Radix Sort with large input values took : " << (diff_large.count()) << " ms" << endl;
 
     return 0;
 }

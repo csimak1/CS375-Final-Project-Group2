@@ -29,8 +29,8 @@ vector<int> NumGen::make_data(int size, string type){
     }
     else if(type == "highValue"){
         //vector<int> data;
-        int min = 100000 * size;
-        int max = 1000000 * size;
+        int min = 10000 * size;
+        int max = 10000 * size;
         for(int i = 0; i < size; i++){
             data.push_back(min + (rand() % (max - min + 1)));
         }
